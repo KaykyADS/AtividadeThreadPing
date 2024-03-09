@@ -11,7 +11,7 @@ public class ThreadPing extends Thread{
 	private int i;
 	
 	public ThreadPing(String process, int i) {
-		this.process = "ping -4 -n 10 " + process;
+		this.process = "ping -4 -c 10 " + process;
 		this.i = i;
 	}
 
@@ -30,39 +30,31 @@ public class ThreadPing extends Thread{
 				/*bufferPing.append(linha);
 				bufferPing.append(" ");
 				bufferPing.append("\n");*/
-				if (linha.contains("bytes")) {
-					String[] split = linha.split(" ");
+				if (linha.contains("time=")) {
+					String[] split = linha.split("time=");
 					switch (i) {
 						case 1:
-							System.out.println("UOL: " + split[4]);
+							System.out.println("UOL tempo: " + split[1]);
 							break;
 						case 2:
-							System.out.println("Terra: " + split[4]);
-							if (linha.contains("dia")) {
-								split = linha.split("dia");
-								System.out.println("UOL média " + split[0]);
-							}
+							System.out.println("Terra tempo: " + split[1]);
 							break;
 						case 3:
-							System.out.println("Google: " + split[4]);
-							if (linha.contains("dia")) {
-								split = linha.split("dia");
-								System.out.println("UOL média " + split[0]);
-							}
+							System.out.println("Google tempo: " + split[1]);
 							break;
 					}
 				} synchronized (ThreadPing.class) {
-					if (linha.contains("dia")) {
-						String split[] = linha.split("dia");
+					if (linha.contains("rtt")) {
+						String split[] = linha.split("/");
 						switch (i) {
 						case 1:
-							System.out.println("UOL média" + split[1]);
+							System.out.println("UOL média --> " + split[4]);
 							break;
 						case 2:
-							System.out.println("Terra média" + split[1]);
+							System.out.println("Terra média --> " + split[4]);
 							break;
 						case 3:
-							System.out.println("Google média" + split[1]);
+							System.out.println("Google média --> " + split[4]);
 							break;
 						}
 					}
